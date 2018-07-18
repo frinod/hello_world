@@ -18,7 +18,7 @@ build_docker_image:
         - docker build -t $TEST_NAME .
         - docker push $TEST_NAME
     tags:
-        - build
+        - docker_dind
 run_docker_image:
     stage: run
     script:
@@ -28,4 +28,4 @@ run_docker_image:
         - docker rm $(docker ps -a -q) || true
         - docker run -dt -p 8080:80 --name gitlabCICDContainer $TEST_NAME
     tags:
-        - run
+        - docker_dind
