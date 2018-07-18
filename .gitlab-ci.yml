@@ -20,6 +20,7 @@ run_docker_image:
         - docker login -u johandurancerdas -p $runnerPass registry.gitlab.com
         - docker pull $TEST_NAME
         - docker kill $(docker ps -q) || true
+        - docker rm $(docker ps -a -q) || true
         - docker run -dt -p 8080:80 --name gitlabCICDContainer $TEST_NAME
     tags:
         - run
