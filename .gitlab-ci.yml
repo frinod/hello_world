@@ -1,0 +1,25 @@
+variables:
+  TEST_NAME: registry.gitlab.com/johandurancerdas/gitlab-cicd-tutorial:$CI_COMMIT_REF_NAME
+
+stages:
+  - build
+  - run
+
+
+build_docker_image:
+    stage: build
+    script:
+        - docker login -u johandurancerdas -p $runnerPass registry.gitlab.com
+        - docker build -t $TEST_NAME .
+        - docker push $TEST_NAME
+    tags:
+        - build
+run_docker_image:
+    stage: run
+    script:
+        - docker login -u johandurancerdas -p $runnerPass registry.gitlab.com
+        - docker pull $TEST_NAME
+        - docker run -dt -p --name testingDocker 8080:80 $TEST_NAME
+    when: manual
+    tags:
+        - run
