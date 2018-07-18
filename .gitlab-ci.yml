@@ -19,6 +19,6 @@ run_docker_image:
     script:
         - docker login -u johandurancerdas -p $runnerPass registry.gitlab.com
         - docker pull $TEST_NAME
-        - docker run -dt -p --name testingDocker 8080:80 $TEST_NAME
+        - docker run -dt -p 8080:80 --name testingDocker $TEST_NAME
     tags:
         - run
