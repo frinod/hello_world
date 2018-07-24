@@ -1,3 +1,6 @@
+variables:
+  IMAGE_NAME: registry.gitlab.com/johandurancerdas/gitlab-cicd-tutorial:$CI_COMMIT_REF_NAME
+
 test_node_app:
   image: node:latest
   script:
@@ -9,3 +12,8 @@ build_node_image:
   image: docker:stable
   services:
     - docker:dind
+  script:
+    - docker login -u johandurancerdas -p $runnerPass registry.gitlab.com
+    - docker build -t IMAGE_NAME .
+    - docker push IMAGE_NAME
+    
