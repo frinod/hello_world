@@ -1,11 +1,11 @@
-image: node:latest
-
-# This folder is cached between builds
-cache:
-  paths:
-  - node_modules/
-
-test_async:
+test_node_app:
+  image: node:latest
   script:
    - npm install
    - npm run ci
+   
+   
+build_node_image:   
+  image: docker:stable
+    services:
+      - docker:dind
