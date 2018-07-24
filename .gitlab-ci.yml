@@ -7,5 +7,5 @@ test_node_app:
    
 build_node_image:   
   image: docker:stable
-    services:
-      - docker:dind
+  services:
+    - docker:dind
