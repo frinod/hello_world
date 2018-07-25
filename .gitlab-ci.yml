@@ -1,6 +1,7 @@
 image: ubuntu:latest
 variables:
-  WORK_DIR: gitlab-cicd-tutorial
+  WORK_DIR: ${CI_PROJECT_NAME}
+  BRANCH: ${CI_COMMIT_REF_NAME}
   REPO: https://gitlab.com/johandurancerdas/gitlab-cicd-tutorial.git
 stages:
   - test
@@ -18,4 +19,4 @@ test:
   script:
     - ssh-add <(echo "$PRIVATE_KEY")
     - rm -rf .git
-    - ssh -o StrictHostKeyChecking=no ubuntu@"$TST_SERVER" "rm -rf ~/${WORK_DIR}; mkdir ~/${WORK_DIR}; git init; git clone -b ${CI_COMMIT_REF_NAME} ${REPO}; cd ${WORK_DIR}; npm install;npm run ci"
+    - ssh -o StrictHostKeyChecking=no ubuntu@"$TST_SERVER" "rm -rf ~/${WORK_DIR}; mkdir ~/${WORK_DIR}; git init; git clone -b ${BRANCH} ${REPO}; cd ${WORK_DIR}; npm install;npm run ci"
