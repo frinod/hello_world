@@ -1,6 +1,6 @@
 image: ubuntu:latest
 variables:
-  - WORK_DIR: gitlabcicd-demoapp
+  WORK_DIR: gitlabcicd-demoapp
 stages:
   - test
 
