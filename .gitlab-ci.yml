@@ -1,4 +1,6 @@
 image: ubuntu:latest
+variables:
+  - WORK_DIR: gitlabcicd-demoapp
 stages:
   - test
 
@@ -15,4 +17,4 @@ test:
   script:
     - ssh-add <(echo "$PRIVATE_KEY")
     - rm -rf .git
-    - ssh -o StrictHostKeyChecking=no ubuntu@"$TST_SERVER" 'rm -rf ~/gitlabcicd-demoapp;mkdir ~/gitlabcicd-demoapp'
+    - ssh -o StrictHostKeyChecking=no ubuntu@"$TST_SERVER" "rm -rf ~/${WORK_DIR}; mkdir ~/${WORK_DIR}"
