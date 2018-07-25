@@ -15,4 +15,4 @@ test:
   script:
     - ssh-add <(echo "$PRIVATE_KEY")
     - rm -rf .git
-    - ssh -o StrictHostKeyChecking=no ubuntu@"$TST_SERVER" 'rm -rf ~/gitlabcicd-demoapp';'mkdir ~/gitlabcicd-demoapp'
+    - ssh -o StrictHostKeyChecking=no ubuntu@"$TST_SERVER" 'rm -rf ~/gitlabcicd-demoapp;mkdir ~/gitlabcicd-demoapp'
