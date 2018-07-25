@@ -1,31 +1,41 @@
+image: ubuntu:latest
 variables:
-  IMAGE_NAME: registry.gitlab.com/johandurancerdas/gitlab-cicd-tutorial:$CI_COMMIT_REF_NAME
-
+  WORK_DIR: ${CI_PROJECT_NAME}
+  BRANCH: ${CI_COMMIT_REF_NAME}
+  REPO: https://gitlab.com/johandurancerdas/gitlab-cicd-tutorial.git
 stages:
- - test
- - build
+  - test
+  - deploy
 
-test_node_app:
+test:
   stage: test
-  image: node:latest
+  environment: 
+    name: Test
+    url: "$TST_URL"
+  before_script:
+  - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+  - mkdir -p ~/.ssh
+  - eval $(ssh-agent -s)
+  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   script:
-    - npm install
-    - npm run ci
+    - ssh-add <(echo "$PRIVATE_KEY")
+    - rm -rf .git
+    - ssh -o StrictHostKeyChecking=no ubuntu@"$TST_SERVER" "rm -rf ~/${WORK_DIR}; mkdir ~/${WORK_DIR}; git init; git clone -b ${BRANCH} ${REPO}; cd ${WORK_DIR}; npm install; cd ${WORK_DIR}; npm run ci"
+
+deploy:
+  stage: deploy
+  environment: 
+    name: Production
+    url: "$PRD_URL"
+  before_script:
+  - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+  - mkdir -p ~/.ssh
+  - eval $(ssh-agent -s)
+  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+  script:
+    - ssh-add <(echo "$PRIVATE_KEY")
+    - rm -rf .git
+    - ssh -o StrictHostKeyChecking=no ubuntu@"$PRD_SERVER" "rm -rf ~/${WORK_DIR}; mkdir ~/${WORK_DIR}; git init; git clone -b ${BRANCH} ${REPO}; cd ${WORK_DIR}; npm install; cd ${WORK_DIR}; npm run start-server"
+
   only:
-    - branches
-  except:
     - master
-   
-   
-build_node_image:
-  stage: build
-  image: docker:stable
-  services:
-    - docker:dind
-  script:
-    - docker login -u johandurancerdas -p $runnerPass registry.gitlab.com
-    - docker build -t $IMAGE_NAME .
-    - docker push $IMAGE_NAME
-  only: 
-    - master
-    
