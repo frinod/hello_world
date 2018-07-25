@@ -1,31 +1,16 @@
-variables:
-  IMAGE_NAME: registry.gitlab.com/johandurancerdas/gitlab-cicd-tutorial:$CI_COMMIT_REF_NAME
-
+image: ubuntu:latest
 stages:
- - test
- - build
+  - test
 
-test_node_app:
+test:
   stage: test
-  image: node:latest
+  environment: 
+    name: Test
+    url: "$TST_URL"
+  when: manual
+  before_script:
+  - apt-get -qq update && apt-get install -y -qq sshpass
   script:
-    - npm install
-    - npm run ci
-  only:
-    - branches
-  except:
-    - master
-   
-   
-build_node_image:
-  stage: build
-  image: docker:stable
-  services:
-    - docker:dind
-  script:
-    - docker login -u johandurancerdas -p $runnerPass registry.gitlab.com
-    - docker build -t $IMAGE_NAME .
-    - docker push $IMAGE_NAME
-  only: 
-    - master
-    
+    - export SSHPASS=$USER_PASS
+    - echo "Pulling from current branch"
+    - sshpass -e ssh -o StrictHostKeyChecking=no ubuntu@"$TST_SERVER" 'git -C ~/ pull origin master'
