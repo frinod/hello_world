@@ -20,7 +20,7 @@ test:
   script:
     - ssh-add <(echo "$PRIVATE_KEY")
     - rm -rf .git
-    - ssh -o StrictHostKeyChecking=no ubuntu@"$TST_SERVER" "rm -rf ~/${WORK_DIR}; mkdir ~/${WORK_DIR}; git init; git clone -b ${BRANCH} ${REPO}; cd ${WORK_DIR}; npm install; npm run stop;cd ${WORK_DIR}; npm run ci"
+    - ssh -o StrictHostKeyChecking=no ubuntu@"$TST_SERVER" "rm -rf ~/${WORK_DIR}; mkdir ~/${WORK_DIR}; git init; git clone -b ${BRANCH} ${REPO}; cd ${WORK_DIR}; npm install; npm run stop-server;cd ${WORK_DIR}; npm run ci"
   only:
     - branches
   except:
@@ -40,7 +40,7 @@ deploy:
   script:
     - ssh-add <(echo "$PRIVATE_KEY")
     - rm -rf .git
-    - ssh -o StrictHostKeyChecking=no ubuntu@"$PRD_SERVER" "rm -rf ~/${WORK_DIR}; mkdir ~/${WORK_DIR}; git init; git clone -b ${BRANCH} ${REPO}; cd ${WORK_DIR}; npm install; npm run stop; cd ${WORK_DIR}; npm run start-server"
+    - ssh -o StrictHostKeyChecking=no ubuntu@"$PRD_SERVER" "rm -rf ~/${WORK_DIR}; mkdir ~/${WORK_DIR}; git init; git clone -b ${BRANCH} ${REPO}; cd ${WORK_DIR}; npm install; npm run stop-server; cd ${WORK_DIR}; npm run start-server"
 
   only:
     - master
