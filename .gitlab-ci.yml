@@ -17,4 +17,4 @@ test:
   script:
     - ssh-add <(echo "$PRIVATE_KEY")
     - rm -rf .git
-    - ssh -o StrictHostKeyChecking=no ubuntu@"$TST_SERVER" "rm -rf ~/${WORK_DIR}; mkdir ~/${WORK_DIR}"
+    - ssh -o StrictHostKeyChecking=no ubuntu@"$TST_SERVER" "rm -rf ~/${WORK_DIR}; mkdir ~/${WORK_DIR}; git -C ~/${WORK_DIR}/ init"
