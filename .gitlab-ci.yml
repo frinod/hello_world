@@ -21,7 +21,12 @@ test:
     - ssh-add <(echo "$PRIVATE_KEY")
     - rm -rf .git
     - ssh -o StrictHostKeyChecking=no ubuntu@"$TST_SERVER" "rm -rf ~/${WORK_DIR}; mkdir ~/${WORK_DIR}; git init; git clone -b ${BRANCH} ${REPO}; cd ${WORK_DIR}; npm install; cd ${WORK_DIR}; npm run ci"
-
+  only:
+    - branches
+  except:
+    - master
+    
+    
 deploy:
   stage: deploy
   environment: 
