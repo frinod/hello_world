@@ -1,6 +1,6 @@
 image: ubuntu:latest
 variables:
-  WORK_DIR: gitlabcicd-demoapp
+  WORK_DIR: gitlab-cicd-tutorial
   REPO: https://gitlab.com/johandurancerdas/gitlab-cicd-tutorial.git
 stages:
   - test
@@ -18,4 +18,4 @@ test:
   script:
     - ssh-add <(echo "$PRIVATE_KEY")
     - rm -rf .git
-    - ssh -o StrictHostKeyChecking=no ubuntu@"$TST_SERVER" "rm -rf ~/${WORK_DIR}; mkdir ~/${WORK_DIR};cd ${WORK_DIR}; git init; git clone ${REPO}"
+    - ssh -o StrictHostKeyChecking=no ubuntu@"$TST_SERVER" "rm -rf ~/${WORK_DIR}; mkdir ~/${WORK_DIR}; git init; git clone ${REPO}; cd ${WORK_DIR}; git checkout ${CI_COMMIT_REF_NAME}"
