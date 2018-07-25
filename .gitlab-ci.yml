@@ -2,8 +2,8 @@ variables:
   IMAGE_NAME: registry.gitlab.com/johandurancerdas/gitlab-cicd-tutorial:$CI_COMMIT_REF_NAME
 
 stages:
- - build
  - test
+ - build
 
 test_node_app:
   stage: test
