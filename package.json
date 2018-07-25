@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start-server": "node app/index_cicd_tutorial.js&",
-    "start-server-for-test" :"node app/index_cicd_tutorial.js",
+    "start-background" :"forever app/index_cicd_tutorial.js",
+    "start-server": "node app/index_cicd_tutorial.js",
     "test": "./node_modules/.bin/jasmine-node spec ",
     "stop-server": "killall node",
-    "ci": "start-server-and-test start-server-for-test http://localhost:8080 test"
+    "ci": "start-server-and-test start-server http://localhost:8080 test"
     },
   "author": "",
   "license": "ISC",
