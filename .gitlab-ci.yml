@@ -7,10 +7,12 @@ test:
   environment: 
     name: Test
     url: "$TST_URL"
-  when: manual
   before_script:
-  - apt-get -qq update && apt-get install -y -qq sshpass
+  - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+  - mkdir -p ~/.ssh
+  - eval $(ssh-agent -s)
+  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   script:
-    - export SSHPASS=$USER_PASS
-    - echo "Pulling from current branch"
-    - sshpass -e ssh -o StrictHostKeyChecking=no ubuntu@"$TST_SERVER" 'git -C ~/ pull origin master'
+    - ssh-add <(echo "$PRIVATE_KEY")
+    - rm -rf .git
+    - ssh -o StrictHostKeyChecking=no ubuntu@"$TST_SERVER" 'rm -rf ~/gitlabcicd-demoapp';'mkdir ~/gitlabcicd-demoapp'
