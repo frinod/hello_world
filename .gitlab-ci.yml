@@ -18,4 +18,4 @@ test:
   script:
     - ssh-add <(echo "$PRIVATE_KEY")
     - rm -rf .git
-    - ssh -o StrictHostKeyChecking=no ubuntu@"$TST_SERVER" "rm -rf ~/${WORK_DIR}; mkdir ~/${WORK_DIR};cd ${WORK_DIR}; git init; git clone ${REPO}; git checkout ${CI_COMMIT_REF_NAME}"
+    - ssh -o StrictHostKeyChecking=no ubuntu@"$TST_SERVER" "rm -rf ~/${WORK_DIR}; mkdir ~/${WORK_DIR};cd ${WORK_DIR}; git init; git clone ${REPO}"
