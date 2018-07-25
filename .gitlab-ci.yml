@@ -22,4 +22,6 @@ build_node_image:
     - docker login -u johandurancerdas -p $runnerPass registry.gitlab.com
     - docker build -t $IMAGE_NAME .
     - docker push $IMAGE_NAME
+  only: 
+    - master
     
