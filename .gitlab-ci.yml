@@ -17,8 +17,8 @@ build_project:
     stage: build
     script:
         - docker login -u johandurancerdas -p $PASS registry.gitlab.com
-        - docker build -t registry.gitlab.com/johandurancerdas/cicd-tutorial .
-        - docker push registry.gitlab.com/johandurancerdas/cicd-tutorial
+        - docker build -t $REGISTRY .
+        - docker push $REGISTRY
 
 test_project:
     stage: test
