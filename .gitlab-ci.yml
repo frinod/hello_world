@@ -1,7 +1,3 @@
-image: docker:latest
-services: 
-  - docker:dind
-
 variables:
   WORK_DIR: ${CI_PROJECT_NAME}
   BRANCH: ${CI_COMMIT_REF_NAME}
@@ -14,23 +10,25 @@ stages:
 
 
 build_project:
+    image: docker:latest
+    services: 
+      - docker:dind
     stage: build
     script:
         - docker login -u johandurancerdas -p $PASS registry.gitlab.com
         - docker build -t $REGISTRY .
         - docker push $REGISTRY
-    tags:
-     - docker_executor
 
 test_project:
+    image: docker:latest
+    services: 
+      - docker:dind    
     stage: test
     script:
         - docker login -u johandurancerdas -p $PASS registry.gitlab.com
         - docker pull $REGISTRY
         - docker stop $(docker ps -a -q) || true && docker rm $(docker ps -a -q) || true
         - docker run --name=$BRANCH -p 80:8080 -i $REGISTRY npm run ci
-    tags:
-     - docker_executor
         
 deploy_project:
     stage: deploy
@@ -38,6 +36,6 @@ deploy_project:
         - docker login -u johandurancerdas -p $PASS registry.gitlab.com
         - docker pull $REGISTRY
         - docker stop $(docker ps -a -q) || true && docker rm $(docker ps -a -q) || true
-        - docker run --name=$BRANCH -p 80:8080 -itd $REGISTRY npm run start-server  
+        - docker run --name=$BRANCH -p 80:8080 -i $REGISTRY npm run start-server
     tags:
-     - docker_executor
+      - shell_executor
