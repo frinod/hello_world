@@ -16,7 +16,7 @@ build_project:
         - docker build -t $REGISTRY .
         - docker push $REGISTRY
     tags:
-     - docker_shell
+     - shell_executor
 
 test_project:
     stage: test
@@ -26,7 +26,7 @@ test_project:
         - docker stop $(docker ps -a -q) || true
         - docker run --name=$BRANCH -p 80:8080 -i $REGISTRY npm run ci
     tags:
-     - docker_shell
+     - shell_executor
         
 deploy_project:
     stage: deploy
@@ -36,4 +36,4 @@ deploy_project:
         - docker stop $(docker ps -a -q) || true
         - docker run --name=$BRANCH -p 80:8080 -itd $REGISTRY npm run start-server  
     tags:
-     - docker_shell
+     - shell_executor
