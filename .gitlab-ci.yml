@@ -35,6 +35,6 @@ deploy_project:
         - docker login -u johandurancerdas -p $PASS registry.gitlab.com
         - docker pull $REGISTRY
         - docker stop $(docker ps -a -q) || true && docker rm $(docker ps -a -q) || true
-        - docker run --name=$BRANCH -p 80:8080 -i $REGISTRY npm run start-server
+        - docker run --name=$BRANCH -p 80:8080 -dit $REGISTRY npm run start-server
     tags:
       - shell_executor
