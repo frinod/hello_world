@@ -9,6 +9,6 @@ RUN npm install
 COPY . /usr/src/app
 
 #CMD [ "npm", "run", "start-server" ]
-
+#CICD
 # replace this with your application's default port
 EXPOSE 8080
